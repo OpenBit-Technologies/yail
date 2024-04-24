@@ -27,22 +27,21 @@ const YailClass = (function() {
             if (this.strict)
                 return siteLang != userLang;
             else
-                return siteLang != userLang && siteLang.substring(0, 2) != userLang.substring(0, 2);
+                return siteLang != userLang && siteLang.substring(0, 2) != userLang.substring(0, 2);  // Using en-GB as a example, it will try en-GB and then just en
         };
 
-        this.translate = function(force) {
+        this.translate = function(root=document, force=false) {
 
             // Don't translate if default language is the selected language
             if (force || this.is_translatable()) {
                 console.debug("Translating terms");
 
-                const i18n_elements = document.querySelectorAll(`[${this.attribute}]`);
+                const i18n_elements = root.querySelectorAll(`[${this.attribute}]`);
                 for(let i = 0; i< i18n_elements.length; i++) {
                     let element = i18n_elements[i];
                     let placeholder = element.getAttribute(this.attribute);
 
                     if (placeholder) {
-                        // Using en-GB as a example, it will try en-GB and then just en
                         let text = null;
                         try {
                             text = this.terms[placeholder][userLang] || this.terms[placeholder][userLang.substring(0 ,2)];

@@ -29,7 +29,11 @@ SPDX-License-Identifier: CC0-1.0
         <a href="?lang=pt">pt</a>
         <a href="?">Reset</a>
         <p custom_attribute="CUSTOM">Element with custom attribute.</p>
-        <button id="setCustom">Change with custom attribute</input>
+        <button id="setCustom">Change with custom attribute</button>
+        <div>
+            <p i18n="MESSAGE">Default values aren't translated if the site languages matches the user language</p>
+            <button id="withScope">Change within this div scope</button>
+        </div>
         <script src="yail.js"></script>
         <script>
             var strict = new URLSearchParams(window.location.search).get("strict");
@@ -68,7 +72,19 @@ SPDX-License-Identifier: CC0-1.0
                     "pt": "Translated using a custom attribute",
                     "en": "Translated using a custom attribute"
                 }}, true, "custom_attribute");
-                yail.translate(true);
+                yail.translate(document, true);
+            });
+
+            document.getElementById("withScope").addEventListener("click", function(){
+                Yail.terms["MESSAGE"] = {
+                    "en-US": "Translated within a scope",
+                    "en-GB": "Translated within a scope",
+                    "pt-PT": "Translated within a scope",
+                    "pt-BR": "Translated within a scope",
+                    "pt": "Translated within a scope",
+                    "en": "Translated within a scope"
+                };
+                Yail.translate(document.getElementsByTagName("div")[0], true);
             });
         </script>
     </body>
