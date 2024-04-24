@@ -20,7 +20,7 @@ SPDX-License-Identifier: CC0-1.0
     </head>
     <body>
         <h1 i18n="TITLE">English</h1>
-        <p i18n="MESSAGE">Default message in English</p>
+        <p i18n="MESSAGE">Default values aren't translated if the site languages matches the user language</p>
         <a href="?lang=en-US&strict=true">en-US</a>
         <a href="?lang=en-US&strict=false">en-US (non strict)</a>
         <a href="?lang=en-UK&strict=true">en-UK</a>
@@ -28,6 +28,8 @@ SPDX-License-Identifier: CC0-1.0
         <a href="?lang=pt-PT">pt-PT</a>
         <a href="?lang=pt-BR">pt-BR</a>
         <a href="?lang=pt">pt</a>
+        <p custom_attribute="CUSTOM">Element with custom attribute.</p>
+        <button id="setCustom">Change with custom attribute</input>
         <script src="yail.js"></script>
         <script>
             const strict = new URLSearchParams(window.location.search).get("strict") || true;
@@ -49,6 +51,19 @@ SPDX-License-Identifier: CC0-1.0
             }, strict);
 
             Yail.translate();
+
+            document.getElementById("setCustom").addEventListener("click", function(){
+                const yail = new YailClass();
+                yail.init({"CUSTOM": {
+                    "en-US": "Translated using a custom attribute",
+                    "en-GB": "Translated using a custom attribute",
+                    "pt-PT": "Translated using a custom attribute",
+                    "pt-BR": "Translated using a custom attribute",
+                    "pt": "Translated using a custom attribute",
+                    "en": "Translated using a custom attribute"
+                }}, true, "custom_attribute");
+                yail.translate(true);
+            });
         </script>
     </body>
 </html>
