@@ -57,22 +57,24 @@ SPDX-License-Identifier: CC0-1.0
                     "pt-PT": "Esta mensagem está em Português de Portugal",
                     "pt-BR": "Esta mensagem está em Português do Brasil",
                     "pt": "Esta mensagem está em Português"
-                }
-            }, strict);
-
-            Yail.translate();
-
-            document.getElementById("setCustom").addEventListener("click", function(){
-                const yail = new YailClass();
-                yail.init({"CUSTOM": {
+                },
+                "CUSTOM": {
                     "en-US": "Translated using a custom attribute",
                     "en-GB": "Translated using a custom attribute",
                     "pt-PT": "Translated using a custom attribute",
                     "pt-BR": "Translated using a custom attribute",
                     "pt": "Translated using a custom attribute",
                     "en": "Translated using a custom attribute"
-                }}, true, "custom_attribute");
-                yail.translate(document, true);
+                }
+            }, strict);
+
+            Yail.translate();
+
+            document.getElementById("setCustom").addEventListener("click", function(){
+                const old = Yail.attribute;
+                Yail.attribute = "custom_attribute";
+                Yail.translate(document, true);
+                Yail.attribute = old;
             });
 
             document.getElementById("withScope").addEventListener("click", function(){
