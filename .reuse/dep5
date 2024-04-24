@@ -1,0 +1,10 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: yail
+Upstream-Contact: Hugo Rodrigues <hugo.rodrigues@openbit.tech>
+Source: https://codeberg.org/openbit/yail
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...
