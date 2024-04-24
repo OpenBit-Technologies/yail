@@ -5,7 +5,7 @@ SPDX-License-Identifier: CC0-1.0
 -->
 
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,22 +21,27 @@ SPDX-License-Identifier: CC0-1.0
     <body>
         <h1 i18n="TITLE">English</h1>
         <p i18n="MESSAGE">Default values aren't translated if the site languages matches the user language</p>
-        <a href="?lang=en-US&strict=true">en-US</a>
+        <a href="?lang=en-US">en-US</a>
         <a href="?lang=en-US&strict=false">en-US (non strict)</a>
-        <a href="?lang=en-UK&strict=true">en-UK</a>
         <a href="?lang=en">en</a>
         <a href="?lang=pt-PT">pt-PT</a>
         <a href="?lang=pt-BR">pt-BR</a>
         <a href="?lang=pt">pt</a>
+        <a href="?">Reset</a>
         <p custom_attribute="CUSTOM">Element with custom attribute.</p>
         <button id="setCustom">Change with custom attribute</input>
         <script src="yail.js"></script>
         <script>
-            const strict = new URLSearchParams(window.location.search).get("strict") || true;
+            var strict = new URLSearchParams(window.location.search).get("strict");
+            if (strict)
+                strict = strict === "true";
+            else
+                strict = true;
             Yail.init({
                 "TITLE": {
                     "en-US": "US English",
                     "en-GB": "UK English",
+                    "en": "English",
                     "pt-PT": "PT Portuguese",
                     "pt-BR": "BR Portuguese",
                     "pt": "Portuguese"
@@ -44,6 +49,7 @@ SPDX-License-Identifier: CC0-1.0
                 "MESSAGE": {
                     "en-US": "This message is in US English",
                     "en-GB": "This message is in UK English",
+                    "en": "This message is in English",
                     "pt-PT": "Esta mensagem está em Português de Portugal",
                     "pt-BR": "Esta mensagem está em Português do Brasil",
                     "pt": "Esta mensagem está em Português"

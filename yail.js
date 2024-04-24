@@ -23,10 +23,17 @@ const YailClass = (function() {
             console.debug(`Strict mode is: ${this.strict}`);
         };
 
-        this.translate = function() {
+        this.is_translatable = function() {
+            if (this.strict)
+                return siteLang != userLang;
+            else
+                return siteLang != userLang && siteLang.substring(0, 2) != userLang.substring(0, 2);
+        };
+
+        this.translate = function(force) {
 
             // Don't translate if default language is the selected language
-            if (siteLang != userLang && siteLang.substring(0, 2) != userLang.substring(0, 2)) {
+            if (force || this.is_translatable()) {
                 console.debug("Translating terms");
 
                 const i18n_elements = document.querySelectorAll(`[${this.attribute}]`);
