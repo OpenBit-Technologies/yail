@@ -41,7 +41,8 @@ SPDX-License-Identifier: CC0-1.0
                 strict = strict === "true";
             else
                 strict = true;
-            Yail.init({
+
+            yail = new Yail({
                 "TITLE": {
                     "en-US": "US English",
                     "en-GB": "UK English",
@@ -68,17 +69,17 @@ SPDX-License-Identifier: CC0-1.0
                 }
             }, strict);
 
-            Yail.translate();
+            yail.translate();
 
             document.getElementById("setCustom").addEventListener("click", function(){
-                const old = Yail.attribute;
-                Yail.attribute = "custom_attribute";
-                Yail.translate(document, true);
+                const old = yail.attribute;
+                yail.attribute = "custom_attribute";
+                yail.translate(true);
                 Yail.attribute = old;
             });
 
             document.getElementById("withScope").addEventListener("click", function(){
-                Yail.terms["MESSAGE"] = {
+                yail.terms["MESSAGE"] = {
                     "en-US": "Translated within a scope",
                     "en-GB": "Translated within a scope",
                     "pt-PT": "Translated within a scope",
@@ -86,7 +87,7 @@ SPDX-License-Identifier: CC0-1.0
                     "pt": "Translated within a scope",
                     "en": "Translated within a scope"
                 };
-                Yail.translate(document.getElementsByTagName("div")[0], true);
+                yail.translate(true, undefined, document.getElementsByTagName("div")[0]);
             });
         </script>
     </body>

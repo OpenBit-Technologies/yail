@@ -3,68 +3,68 @@
 // SPDX-License-Identifier: MIT
 "use strict";
 
-const YailClass = (function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const userLang = urlParams.get("lang") || navigator.language || navigator.userLanguage;
-    const siteLang = document.getElementsByTagName("html")[0].getAttribute("lang") || "en-gb";
-    const defaultAttribute = "i18n"
+const yailDefaultAttribute = "i18n"
 
-    var YailClass = function() {
+class Yail {
+    constructor(terms, strict=false, attribute=yailDefaultAttribute) {
+        this.terms = terms;
+        this.strict = strict;
+        this.attribute = attribute;
+        console.debug(`User language is: ${this.userLang}`);
+        console.debug(`Site language is: ${this.siteLang}`);
+        console.debug(`Strict mode is: ${this.strict}`);
+    }
 
-        this.terms = {};
-        this.strict = false;
+    get userLang() {
+        let urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get("lang") || navigator.language || navigator.userLanguage;
+    }
 
-        this.init = function(terms, strict=false, attribute=defaultAttribute) {
-            this.terms = terms;
-            this.strict = strict;
-            this.attribute = attribute;
-            console.debug(`User language is: ${userLang}`);
-            console.debug(`Site language is: ${siteLang}`);
-            console.debug(`Strict mode is: ${this.strict}`);
-        };
+    get siteLang() {
+        return document.getElementsByTagName("html")[0].getAttribute("lang") || "en-us";
+    }
 
-        this.is_translatable = function() {
-            if (this.strict)
-                return siteLang != userLang;
-            else
-                return siteLang != userLang && siteLang.substring(0, 2) != userLang.substring(0, 2);  // Using en-GB as a example, it will try en-GB and then just en
-        };
+    translatable(language) {
+        // Don't translate if default language is the selected language
+        if (this.strict)
+            return this.siteLang != language;
+        else
+            return this.siteLang != language && this.siteLang.substring(0, 2) != language.substring(0, 2);  // Using en-GB as a example, it will try en-GB and then just en
+    }
 
-        this.translate = function(root=document, force=false) {
+    translate(force=false, language=undefined, root=document) {
+        if (!language) {
+            language = this.userLang;
+        }
 
-            // Don't translate if default language is the selected language
-            if (force || this.is_translatable()) {
-                console.debug("Translating terms");
+        if (force || this.translatable(language)) {
+            console.debug(`Translating terms to ${language}`);
 
-                const i18n_elements = root.querySelectorAll(`[${this.attribute}]`);
-                for(let i = 0; i< i18n_elements.length; i++) {
-                    let element = i18n_elements[i];
-                    let placeholder = element.getAttribute(this.attribute);
+            const i18n_elements = root.querySelectorAll(`[${this.attribute}]`);
+            for(let i = 0; i< i18n_elements.length; i++) {
+                let element = i18n_elements[i];
+                let placeholder = element.getAttribute(this.attribute);
 
-                    if (placeholder) {
-                        let text = null;
-                        try {
-                            text = this.terms[placeholder][userLang] || this.terms[placeholder][userLang.substring(0 ,2)];
-                        } catch(err) {
-                            if (err instanceof TypeError)
-                                console.error(`No mapping for ${placeholder}`);
-                            else
-                                console.error(err);
-                        }
-                        if (text)
-                            element.innerText = text;
+                if (placeholder) {
+                    let text = null;
+                    try {
+                        text = this.terms[placeholder][language] || this.terms[placeholder][language.substring(0 ,2)];
+                    } catch(err) {
+                        if (err instanceof TypeError)
+                            console.error(`No mapping for ${placeholder}`);
                         else
-                            console.warn(`Unable to find translation in ${userLang} for ${placeholder}`);
+                            console.error(err);
                     }
-                    else {
-                        console.warn("Unable to find placeholder");
-                    }
+                    if (text)
+                        element.innerText = text;
+                    else
+                        console.warn(`Unable to find translation in ${language} for ${placeholder}`);
+                }
+                else {
+                    console.warn("Unable to find placeholder");
                 }
             }
-        };
-    };
+        }
 
-    return YailClass;
-})();
-
-const Yail = new YailClass();
+    }
+}
