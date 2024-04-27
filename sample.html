@@ -21,13 +21,13 @@ SPDX-License-Identifier: CC0-1.0
     <body>
         <h1 i18n="TITLE">English</h1>
         <p i18n="MESSAGE">Default values aren't translated if the site languages matches the user language</p>
-        <a href="?lang=en-US">en-US</a>
+        <a class="selector" href="#">en-US</a>
         <a href="?lang=en-US&strict=false">en-US (non strict)</a>
-        <a href="?lang=en">en</a>
-        <a href="?lang=pt-PT">pt-PT</a>
-        <a href="?lang=pt-BR">pt-BR</a>
-        <a href="?lang=pt">pt</a>
-        <a href="?">Reset</a>
+        <a class="selector" href="#">en-GB</a>
+        <a class="selector" href="#">en</a>
+        <a class="selector" href="#">pt-PT</a>
+        <a class="selector" href="#">pt-BR</a>
+        <a class="selector" href="#">pt</a>
         <p custom_attribute="CUSTOM">Element with custom attribute.</p>
         <button id="setCustom">Change with custom attribute</button>
         <div>
@@ -43,50 +43,60 @@ SPDX-License-Identifier: CC0-1.0
                 strict = true;
 
             yail = new Yail({
-                "TITLE": {
-                    "en-US": "US English",
-                    "en-GB": "UK English",
-                    "en": "English",
-                    "pt-PT": "PT Portuguese",
-                    "pt-BR": "BR Portuguese",
-                    "pt": "Portuguese"
+                "en-US": {
+                    "TITLE": "US English",
+                    "MESSAGE": "This message is in US English",
+                    "CUSTOM": "Translated using a custom attribute"
                 },
-                "MESSAGE": {
-                    "en-US": "This message is in US English",
-                    "en-GB": "This message is in UK English",
-                    "en": "This message is in English",
-                    "pt-PT": "Esta mensagem está em Português de Portugal",
-                    "pt-BR": "Esta mensagem está em Português do Brasil",
-                    "pt": "Esta mensagem está em Português"
+                "en": {
+                    "TITLE": "English",
+                    "MESSAGE": "This message is in English",
+                    "CUSTOM": "Translated using a custom attribute"
                 },
-                "CUSTOM": {
-                    "en-US": "Translated using a custom attribute",
-                    "en-GB": "Translated using a custom attribute",
-                    "pt-PT": "Translated using a custom attribute",
-                    "pt-BR": "Translated using a custom attribute",
-                    "pt": "Translated using a custom attribute",
-                    "en": "Translated using a custom attribute"
+                "pt-PT": {
+                    "TITLE": "Português de Portugal",
+                    "MESSAGE": "Esta mensagem está em Português de Portugal",
+                    "CUSTOM": "Translated using a custom attribute"
+                },
+                "pt-BR": {
+                    "TITLE": "Português do Brasil",
+                    "MESSAGE": "Esta mensagem está em Português do Brasil",
+                    "CUSTOM": "Translated using a custom attribute"
+                },
+                "pt": {
+                    "TITLE": "Português",
+                    "MESSAGE": "Esta mensagem está em Português",
+                    "CUSTOM": "Translated using a custom attribute"
                 }
             }, strict);
 
             yail.translate();
 
+            const selectors = document.getElementsByClassName("selector");
+
+            for(let i = 0; i < selectors.length; i++) {
+                selectors[i].addEventListener("click", function(){
+                    yail.strict = true;
+                    yail.translate(false, selectors[i].innerText);
+                });
+            }
+
             document.getElementById("setCustom").addEventListener("click", function(){
                 const old = yail.attribute;
                 yail.attribute = "custom_attribute";
                 yail.translate(true);
-                Yail.attribute = old;
+                yail.attribute = old;
             });
 
             document.getElementById("withScope").addEventListener("click", function(){
-                yail.terms["MESSAGE"] = {
-                    "en-US": "Translated within a scope",
-                    "en-GB": "Translated within a scope",
-                    "pt-PT": "Translated within a scope",
-                    "pt-BR": "Translated within a scope",
-                    "pt": "Translated within a scope",
-                    "en": "Translated within a scope"
-                };
+                let yail = new Yail({
+                    "en-US": {"MESSAGE": "Translated within a scope" },
+                    "en-GB": { "MESSAGE": "Translated within a scope" },
+                    "en": { "MESSAGE": "Translated within a scope" },
+                    "pt-PT": { "MESSAGE": "Translated within a scope" },
+                    "pt-BR": { "MESSAGE": "Translated within a scope" },
+                    "pt": { "MESSAGE": "Translated within a scope" }
+                });
                 yail.translate(true, undefined, document.getElementsByTagName("div")[0]);
             });
         </script>
