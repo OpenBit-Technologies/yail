@@ -57,12 +57,12 @@ class Yail {
         }
     }
 
-    translate(force=false, language=undefined, root=document) {
+    translate(language=undefined, force=false, root=document) {
         // Apply translation
         //
         // Args:
-        //  force (bool): If true, translation is always applied
         //  language (str): Target language. Defaults to this.userLang
+        //  force (bool): If true, translation is always applied
         //  root (element): Root element to apply translation
         if (!language) {
             language = this.userLang;

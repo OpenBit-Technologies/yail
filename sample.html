@@ -77,14 +77,14 @@ SPDX-License-Identifier: CC0-1.0
             for(let i = 0; i < selectors.length; i++) {
                 selectors[i].addEventListener("click", function(){
                     yail.strict = true;
-                    yail.translate(false, selectors[i].innerText);
+                    yail.translate(selectors[i].innerText);
                 });
             }
 
             document.getElementById("setCustom").addEventListener("click", function(){
                 const old = yail.attribute;
                 yail.attribute = "custom_attribute";
-                yail.translate(true);
+                yail.translate();
                 yail.attribute = old;
             });
 
@@ -97,7 +97,7 @@ SPDX-License-Identifier: CC0-1.0
                     "pt-BR": { "MESSAGE": "Translated within a scope" },
                     "pt": { "MESSAGE": "Translated within a scope" }
                 });
-                yail.translate(true, undefined, document.getElementsByTagName("div")[0]);
+                yail.translate(undefined, true, document.getElementsByTagName("div")[0]);
             });
         </script>
     </body>
