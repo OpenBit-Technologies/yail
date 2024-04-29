@@ -39,12 +39,26 @@ class Yail {
         return document.getElementsByTagName("html")[0].getAttribute("lang") || "en-us";
     }
 
+    check_language(language) {
+        // Check if a language is available in this.terms
+        //
+        // Args:
+        //  language (str): Target language
+
+        if (this.strict) {
+            return language in this.terms;
+        } else {
+            return language in this.terms || language.substring(0, 2) in this.terms;
+        }
+    }
+
     translatable(language) {
         // Check if translation is needed
         //
         // Args:
         //  language (str): Target language
 
+        // Always translate on first iteration
         if (!this.first_translation) {
             return true;
         }
@@ -68,7 +82,7 @@ class Yail {
             language = this.userLang;
         }
 
-        if (!(language in this.terms)) {
+        if (!this.check_language(language)) {
             console.error(`No terms for language ${language}`);
             return false;
         }
